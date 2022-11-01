@@ -12,6 +12,7 @@ abstract class UserService {
           'https://randomuser.me/api/1.4/?format=json&results=20&inc=gender,email,name,picture&nat=br';
       Response response = await Dio()
           .get(baseUrl, queryParameters: {'page': page, 'gender': gender});
+
       return response.data as Map<String, dynamic>;
     } on DioError catch (e) {
       if (e.response != null) {

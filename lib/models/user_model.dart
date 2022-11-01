@@ -1,35 +1,36 @@
-class UserModel {
-  List<Results>? results;
+class Result {
+  List<User>? users;
 
-  UserModel({this.results});
+  Result({this.users});
 
-  UserModel.fromJson(Map<String, dynamic> json) {
+  Result.fromJson(Map<String, dynamic> json) {
+    print(json);
     if (json['results'] != null) {
-      results = <Results>[];
+      users = <User>[];
       json['results'].forEach((v) {
-        results!.add(new Results.fromJson(v));
+        users!.add(new User.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.results != null) {
-      data['results'] = this.results!.map((v) => v.toJson()).toList();
+    if (this.users != null) {
+      data['results'] = this.users!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class Results {
+class User {
   String? gender;
   Name? name;
   String? email;
   Picture? picture;
 
-  Results({this.gender, this.name, this.email, this.picture});
+  User({this.gender, this.name, this.email, this.picture});
 
-  Results.fromJson(Map<String, dynamic> json) {
+  User.fromJson(Map<String, dynamic> json) {
     gender = json['gender'];
     name = json['name'] != null ? new Name.fromJson(json['name']) : null;
     email = json['email'];

@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:giga_test_app/models/user_model.dart';
 import 'package:giga_test_app/repositories/user_repository.dart';
+import 'package:giga_test_app/services/sql_service.dart';
+import 'package:giga_test_app/singletons.dart';
+import 'package:giga_test_app/views/home_screen.dart';
+import 'package:giga_test_app/views/user_screen.dart';
+import 'package:sqflite/sqflite.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  db = await SqLiteService().initDB();
   runApp(const MyApp());
 }
 
@@ -14,67 +20,43 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-
-        primarySwatch: Colors.blue,
-      ),
-      home:  MyHomePage(),
+      debugShowCheckedModeBanner: false,
+      routes: {
+        '/':(_) => HomeScreen(),
+        '/user':(_) => UserScreen()
+      },
+      initialRoute:'/user',
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-
-
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
 
-
   Future<void> _incrementCounter() async {
-    UserModel teste= await UsersRepository().repoFetchUser(page: 2,gender: 'male');
-    print(teste.results![0].email);
 
+    Result teste =
+        await UsersRepository().repoFetchUser(page: 1, gender: 'male', db: db!);
+    SqLiteService().insertUser(db!, teste.users![0]);
+    SqLiteService().getUsers(db!, 1, 0);
   }
 
   @override
   void initState() {
     _incrementCounter();
-
-
   }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-
         title: Text('a'),
       ),
-      body: Center(
-
-        child: Column(
-
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text('a',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      body: Center(), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
