@@ -33,12 +33,17 @@ class SqLiteService {
 
   Future<List<Map<String, dynamic>>> getUsers( Database db,int limit, int offset) async {
      var newoffset=offset*20;
-    String query ='SELECT * FROM users LIMIT '+limit.toString()+' OFFSET '+newoffset.toString();
+    String query ='SELECT * FROM users LIMIT $limit OFFSET $newoffset';
     final List<Map<String, dynamic>> maps = await db.rawQuery(query);
     return maps;
   }
   Future<void> deleteDB(Database db) async {
     await db.delete('users');
+
+  }
+  Future<void> deleteUser(Database db,String email) async {
+    String query='DELETE FROM users WHERE email =' + "'" +email+ "';" ;
+    await db.rawDelete(query);
 
   }
 

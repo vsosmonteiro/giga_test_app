@@ -19,25 +19,25 @@ class _UserScreenState extends State<UserScreen> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    content: Text('Deseja deletar esse usuário?'),
+                    content: const Text('Deseja deletar esse usuário?'),
                     actions: [
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: Text('Sim'),
+                        child: const Text('Sim'),
                       ),
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: Text('Não'),
+                        child: const Text('Não'),
                       )
                     ],
                   );
                 });
           },
-          label: Text('Delete user from DB')),
+          label: const Text('Delete user from DB')),
       body: SafeArea(
         child: Column(
           children: [
@@ -104,22 +104,22 @@ class _UserScreenState extends State<UserScreen> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             Container(
               width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 vertical: 20,
               ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 12.0),
+              decoration: const BoxDecoration(color: Colors.grey),
+              child: const Padding(
+                padding: EdgeInsets.only(left: 12.0),
                 child: Text(
                   'Dados do usuário',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-              decoration: BoxDecoration(color: Colors.grey),
             ),
             Padding(
               padding:
@@ -152,7 +152,12 @@ class _UserScreenState extends State<UserScreen> {
                       icon: const Icon(Icons.copy))
                 ],
               ),
-            )
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
+              child: const Text('Return '),
+            ),
           ],
         ),
       ),

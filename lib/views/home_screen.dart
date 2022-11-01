@@ -12,11 +12,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Random App'),
+        title: const Text('Random App'),
         centerTitle: true,
-        actions: [
+        actions: const [
           Padding(
-            padding: const EdgeInsets.only(right: 24.0),
+            padding: EdgeInsets.only(right: 24.0),
             child: InkWell(
               child: Icon(Icons.refresh),
             ),
@@ -25,21 +25,23 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: ListView(children: [
         Container(
-          margin: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+          margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
           decoration: BoxDecoration(
               border: Border.all(
                 width: 2,
                 color: Colors.grey,
               ),
               borderRadius: BorderRadius.circular(12)),
-          child: ListTile(
+          child:  ListTile(
             leading: CircleAvatar(child: Icon(Icons.person)),
             title: Text('Jose Carlos Segundo'),
             subtitle: Text('jose2@gmail.com'),
-            trailing: Icon(Icons.navigate_next),
+            trailing: IconButton(
+                onPressed: () => Navigator.pushNamed(context, '/user'),
+                icon: Icon(Icons.navigate_next)),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 32,
         ),
         Padding(
@@ -47,9 +49,9 @@ class _HomeScreenState extends State<HomeScreen> {
           child: ElevatedButton(
               style: ButtonStyle(
                   padding: MaterialStateProperty.all(
-                      EdgeInsets.symmetric(vertical: 20))),
+                      const EdgeInsets.symmetric(vertical: 20))),
               onPressed: () {},
-              child: Text('Load More')),
+              child: const Text('Load More')),
         )
       ]),
     );
