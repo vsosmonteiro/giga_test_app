@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 
-import 'exceptions/api_exception.dart';
+import '../models/exceptions/api_exception.dart';
 
 abstract class UserService {
   static Future<Map<String, dynamic>> fetchUsers(
@@ -22,3 +22,4 @@ abstract class UserService {
     }
   }
 }
+
