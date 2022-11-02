@@ -21,8 +21,12 @@ abstract class UsersRepository {
     await _connectivity.checkConnectivity();
 
     if (connectivityResult != ConnectivityResult.none && dbuse == false) {
-      return Result.fromJson(
+      Result result=Result.fromJson(
           await UserService.fetchUsers(page: page, gender: gender));
+      result.users?.forEach((element) {
+        insertUser(element);
+      });
+      return result;
     }
 
     List<Map<String, dynamic>> dbquery = await SqLiteService.getUsers(

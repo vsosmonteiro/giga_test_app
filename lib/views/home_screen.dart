@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:giga_test_app/bloc/user/user_bloc.dart';
 import 'package:giga_test_app/bloc/user/user_event.dart';
 import 'package:giga_test_app/bloc/user/user_state.dart';
+import 'package:giga_test_app/widgets/loading_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,13 +21,12 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 24.0),
+            padding: const EdgeInsets.only(right: 24.0),
             child: InkWell(
               onTap: () {
-                context.read<UserBloc>()
-                  ..add(UserFetchEvent(false, 1, 'male'));
+                context.read<UserBloc>()..add(UserFetchEvent(false, 1, 'male'));
               },
-              child: Icon(Icons.refresh),
+              child: const Icon(Icons.refresh),
             ),
           )
         ],
@@ -34,40 +34,62 @@ class _HomeScreenState extends State<HomeScreen> {
       body: BlocConsumer<UserBloc, UserState>(
         listener: (context, state) {},
         builder: (context, state) {
-          if(state is UserErrorState)
-          {
-            return Container(
-                height: 100,
-                width: 100,
-                color:Colors.pink
-            );
+          if (state is UserErrorState) {
+            return Container(height: 100, width: 100, color: Colors.pink);
           }
 
-          if(state is UserLoadingState)
-          {
-            return Container(
-                height: 100,
-                width: 100,
-                color:Colors.grey
+          if (state is UserLoadingState) {
+            return ListView.builder(
+              itemBuilder: (context, index) => LoadingWidget(),
+              itemCount: 6,
             );
           }
-          if(state is UserLoadedState)
-            {
-              return Container(
-                  height: 100,
-                  width: 100,
-                  color:Colors.blue
-              );
-            }
-          else
-            {
-              return Container(
-                  height: 100,
-                  width: 100,
-                  color:Colors.red
-              );
-            }
-
+          if (state is UserLoadedState) {
+            return ListView.builder(
+              itemCount: state.result.users!.length,
+              itemBuilder: (context, index) => Container(
+                margin:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 2,
+                    color: Colors.black,
+                  ),
+                ),
+                child: ListTile(
+                  leading: Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: NetworkImage(
+                            state.result.users![index].picture!.medium!),
+                      ),
+                    ),
+                  ),
+                  title: Text(
+                    state.result.users![index].name!.title! +
+                        ' ' +
+                        state.result.users![index].name!.first! +
+                        ' ' +
+                        state.result.users![index].name!.last!,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  subtitle: Text(state.result.users![index].email!,
+                      style: TextStyle(fontSize: 12)),
+                  dense: true,
+                  trailing: IconButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/user');
+                      },
+                      icon: Icon(Icons.navigate_next)),
+                ),
+              ),
+            );
+          } else {
+            return Container(height: 100, width: 100, color: Colors.red);
+          }
         },
         buildWhen: (previous, current) => previous != current,
       ),
