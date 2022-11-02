@@ -7,7 +7,7 @@ class Result {
     print(json);
     if (json['results'] != null) {
       users = <User>[];
-      json['results'].forEach((v) {
+       json['results'].forEach((v) {
         users!.add(new User.fromJson(v));
       });
     }

@@ -5,16 +5,19 @@ import 'package:giga_test_app/models/user_model.dart';
 import 'package:giga_test_app/services/user_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/widgets.dart';
+import 'package:giga_test_app/singletons.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../services/sql_service.dart';
 
-class UsersRepository {
-  final Connectivity _connectivity = Connectivity();
+ abstract class UsersRepository {
 
-  Future<Result> repoFetchUser(
-      {required int page, required String gender, required Database db}) async {
+
+  static Future<Result>  repoFetchUser(
+      {required int page, required String gender}) async {
+
+    final Connectivity _connectivity = Connectivity();
     ConnectivityResult connectivityResult =
         await _connectivity.checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
@@ -22,7 +25,7 @@ class UsersRepository {
           await UserService.fetchUsers(page: page, gender: gender));
     }
 
-    List<Map<String, dynamic>> dbquery = await SqLiteService().getUsers(db, 1, 0);
+    List<Map<String, dynamic>> dbquery = await SqLiteService().getUsers(db!, 1, 0);
     if(dbquery.length<=0)
       {
         throw NoUserException(message: 'No More Users to Show');

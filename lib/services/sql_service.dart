@@ -16,7 +16,6 @@ class SqLiteService {
   }
 
   Future<void> insertUser(Database db, User results) async {
-
     await db.rawInsert(
         'INSERT OR REPLACE INTO users(email,gender,title,first_name,last_name,picture_large,picture_medium,thumbnail) VALUES(\$1,\$2,\$3,\$4,\$5,\$6,\$7,\$8)',
         [
@@ -31,20 +30,20 @@ class SqLiteService {
         ]);
   }
 
-  Future<List<Map<String, dynamic>>> getUsers( Database db,int limit, int offset) async {
-     var newoffset=offset*20;
-    String query ='SELECT * FROM users LIMIT $limit OFFSET $newoffset';
+  Future<List<Map<String, dynamic>>> getUsers(
+      Database db, int limit, int offset) async {
+    var newoffset = offset * 20;
+    String query = 'SELECT * FROM users LIMIT $limit OFFSET $newoffset';
     final List<Map<String, dynamic>> maps = await db.rawQuery(query);
     return maps;
   }
+
   Future<void> deleteDB(Database db) async {
     await db.delete('users');
-
   }
-  Future<void> deleteUser(Database db,String email) async {
-    String query='DELETE FROM users WHERE email =' + "'" +email+ "';" ;
+
+  Future<void> deleteUser(Database db, String email) async {
+    String query = 'DELETE FROM users WHERE email =' + "'" + email + "';";
     await db.rawDelete(query);
-
   }
-
 }

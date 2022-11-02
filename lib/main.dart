@@ -41,11 +41,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _incrementCounter() async {
 
-    Result teste = await UsersRepository().repoFetchUser(page: 1, gender: 'male', db: db!);
+    Result teste = await UsersRepository.repoFetchUser(page: 1, gender: 'male');
     SqLiteService().insertUser(db!, teste.users![0]);
     SqLiteService().getUsers(db!, 1, 0);
     SqLiteService().deleteUser(db!, teste.users![0].email!);
-    Result teste2=  await UsersRepository().repoFetchUser(page: 1, gender: 'male', db: db!);
+    Result teste2=  await UsersRepository.repoFetchUser(page: 1, gender: 'male');
   }
 
   @override
