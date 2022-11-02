@@ -10,21 +10,18 @@ import 'package:giga_test_app/models/user_model.dart';
 import 'package:giga_test_app/repositories/user_repository.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
-  // bloc to manage state
   UserBloc() : super(UserInitialState()) {
-    //when you request the data
     on<UserFetchEvent>(
       _fetch
     );
-    //when you delete the data
+
     on<UserDeleteEvent>(
      _deleteUser
     );
-    //insert new user on db
     on<UserInsertEvent>(
       _insertUser
     );
-    // delete user from db
+
     on<UserDBDeleteEvent>(
         _deleteDB
     );
@@ -40,32 +37,26 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       Result result = await UsersRepository.repoFetchUser(
           page: event.page, gender: event.gender, dbuse: event.db);
-      //if everything is okay will emit
       emit(UserLoadedState(result),
       );
     } catch (e) {
-      //if the list is empty
       if (e is NoUserException) {
         emit(
           UserNoUserState(),
         );
       }
-
       if (e is ApiException) {
-        //if the request didnt make to the api
         if (e.code == -1) {
           emit(
             UserErrorState(' Error Sending Request'),
           );
         } else {
-          //if the request make but didnt return 200
           emit(
             UserErrorState('API Error'),
           );
         }
       }
       if (e is MyDatabaseException) {
-        //if the db Throw an error
         emit(
           UserErrorState('Database error, please try again'),
         );

@@ -10,7 +10,6 @@ class UserEvent extends Equatable{
 
 
 class UserFetchEvent extends UserEvent{
-  //fetch data
   bool db;
   int page;
   String gender;
@@ -19,19 +18,16 @@ class UserFetchEvent extends UserEvent{
 
 
 class UserDeleteEvent extends UserEvent{
-  //delete from db
   String email;
   UserDeleteEvent(this.email);
 }
 
 
 class UserInsertEvent extends UserEvent{
-  //insert in db
   User user;
   UserInsertEvent(this.user);
 }
 
 
 class UserDBDeleteEvent extends UserEvent{
-  // delete the entire db
 }

@@ -8,7 +8,6 @@ class Circle_Container extends StatefulWidget {
 }
 
 class _Circle_ContainerState extends State<Circle_Container> {
-  // makes the image be circular
   @override
   Widget build(BuildContext context) {
     return Container(

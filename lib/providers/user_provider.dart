@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class UserProvider extends ChangeNotifier {
-  // provides the necessary data for the user screen
   String name = '';
   String email = '';
   String largePicture = '';

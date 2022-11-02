@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class LoadingWidget extends StatefulWidget {
-  // creates a shinner effect when updating the gradient
   const LoadingWidget({Key? key}) : super(key: key);
 
   @override

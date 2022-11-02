@@ -31,7 +31,6 @@ class _UserScreenState extends State<UserScreen> {
   Column _body(BuildContext context)  {
     return Column(
       children: [
-        //stack to make overlay effect
         const Stackwidget(),
         const SizedBox(
           height: 12,
@@ -62,7 +61,6 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   Padding _copyWidget(String value)  {
-    // copys to clipboard
     return Padding(
         padding:
             const EdgeInsets.symmetric(vertical: 12.0, horizontal: 12),
@@ -82,7 +80,6 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   FloatingActionButton _floatingButton(BuildContext context) {
-    // extended to fit the text better
     return FloatingActionButton.extended(
         onPressed: () {
           showDialog(

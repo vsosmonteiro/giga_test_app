@@ -1,11 +1,9 @@
 class Result {
-  // the fetch returns a list of users
   List<User>? users;
 
   Result({this.users});
 
   Result.fromJson(Map<String, dynamic> json) {
-    //adding users to list
     if (json['results'] != null) {
       users = <User>[];
        json['results'].forEach((v) {
