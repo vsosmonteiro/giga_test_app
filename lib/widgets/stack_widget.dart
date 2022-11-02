@@ -45,37 +45,34 @@ class _StackwidgetState extends State<Stackwidget> {
                   ]),
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                  child: Row(
-                    children: [
-                      Circle_Container(url: _userProvider.largePicture),
-                      const SizedBox(
-                        width: 12,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(_userProvider.email),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Text(_userProvider.name)
-                        ],
-                      ),
-                      const Spacer(),
-                      _userProvider.gender == 'male'
-                          ? Icon(
-                              Icons.male,
-                              color: Colors.blue,
-                            )
-                          : Icon(
-                              Icons.female,
-                              color: Colors.pink,
-                            )
-                    ],
-                  ),
+                child: Row(
+                  children: [
+                    Circle_Container(url: _userProvider.largePicture),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(_userProvider.email),
+                        const SizedBox(
+                          height: 4,
+                        ),
+                        Text(_userProvider.name)
+                      ],
+                    ),
+                    const Spacer(),
+                    _userProvider.gender == 'male'
+                        ? const Icon(
+                            Icons.male,
+                            color: Colors.blue,
+                          )
+                        : const Icon(
+                            Icons.female,
+                            color: Colors.pink,
+                          )
+                  ],
                 ),
               ),
             ),
