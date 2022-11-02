@@ -1,16 +1,9 @@
 # giga_test_app
+Pergunta 1:Quais padrões de gerenciamento de estados já utilizou em seus projetos ou que tem bons conhecimentos?
+Resposta 1: Eu já uutilizei BLOC e provider e possuo bom conhecimento em ambos.
 
-A new Flutter project.
+Pergunta 2:Tem conhecimentos de SOLID e arquitetura limpa? Se sim, já utilizou em algum projeto?
+Resposta 2:Não
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Pergunta 3:Poderia listar e compartilhar projetos em Flutter já realizados?
+projetos: https://github.com/vsosmonteiro/weather_app_v1, https://github.com/vsosmonteiro/card_app
