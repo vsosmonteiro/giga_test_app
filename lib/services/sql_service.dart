@@ -6,7 +6,7 @@ import 'package:path/path.dart';
 
 
   static Future<Database> initDB() async {
-    final String database_name = 'Users.db';
+    const String database_name = 'Users.db';
     final databasepath = await getDatabasesPath();
     final path = join(databasepath, database_name);
 
@@ -36,7 +36,6 @@ import 'package:path/path.dart';
     var newoffset = offset * 20;
     String query = "SELECT * FROM users WHERE gender = '$gender' LIMIT 20 OFFSET $newoffset";
     final List<Map<String, dynamic>> maps = await db.rawQuery(query);
-    //print(maps);
     return maps;
   }
 
