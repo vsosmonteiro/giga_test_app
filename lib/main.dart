@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:giga_test_app/bloc/user/user_bloc.dart';
+import 'package:giga_test_app/bloc/user/user_state.dart';
 import 'package:giga_test_app/models/user_model.dart';
 import 'package:giga_test_app/repositories/user_repository.dart';
 import 'package:giga_test_app/services/sql_service.dart';
@@ -15,19 +18,20 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      routes: {
-        '/':(_) => HomeScreen(),
-        '/user':(_) => UserScreen(),
-        '/teste':(_) => MyHomePage()
+    return BlocProvider<UserBloc>(
+      create: (BuildContext context)=>UserBloc(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        routes: {
+          '/':(_) => HomeScreen(),
+          '/user':(_) => UserScreen(),
+          '/teste':(_) => MyHomePage()
 
-      },
-      initialRoute:'/teste',
+        },
+        initialRoute:'/',
+      ),
     );
   }
 }
@@ -38,21 +42,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-  Future<void> _incrementCounter() async {
-  /*
-    Result teste = await UsersRepository.repoFetchUser(page: 1, gender: 'male');
-    SqLiteService().insertUser(db!, teste.users![0]);
-    SqLiteService().getUsers(db!, 1, 0);
-    SqLiteService().deleteUser(db!, teste.users![0].email!);
-    Result teste2=  await UsersRepository.repoFetchUser(page: 1, gender: 'male');
-   */
-  }
-
-  @override
-  void initState() {
-    _incrementCounter();
-  }
 
   @override
   Widget build(BuildContext context) {

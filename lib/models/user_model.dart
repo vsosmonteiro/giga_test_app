@@ -4,7 +4,6 @@ class Result {
   Result({this.users});
 
   Result.fromJson(Map<String, dynamic> json) {
-    print(json);
     if (json['results'] != null) {
       users = <User>[];
        json['results'].forEach((v) {

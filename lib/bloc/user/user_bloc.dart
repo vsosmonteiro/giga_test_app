@@ -9,6 +9,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc() : super(UserInitialState()) {
     on<UserFetchEvent>(
       (event, emit) async {
+        emit(UserLoadingState());
         try {
           Result result = await UsersRepository.repoFetchUser(
               page: event.page, gender: event.gender, dbuse: event.db);
@@ -23,19 +24,20 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       },
     );
     on<UserDeleteEvent>(
-      (event, emit) {
-        UsersRepository.deleteUser(event.email);
-        emit(UserDeletedState());
+      (event, emit) async {
+        await UsersRepository.deleteUser(event.email);
+        emit(UserNewFetchState());
       },
     );
     on<UserInsertEvent>(
-      (event, emit) {
-        UsersRepository.insertUser(event.user);
+      (event, emit) async {
+        await UsersRepository.insertUser(event.user);
+        emit(UserNewFetchState());
       },
     );
     on<UserDBDeleteEvent>((event,emit){
       UsersRepository.deleteDB();
-      emit(UserDBDeletedState());
+      emit(UserNewFetchState());
     });
   }
 }

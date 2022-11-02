@@ -20,7 +20,7 @@ abstract class UsersRepository {
     ConnectivityResult connectivityResult =
     await _connectivity.checkConnectivity();
 
-    if (connectivityResult == ConnectivityResult.none && dbuse == false) {
+    if (connectivityResult != ConnectivityResult.none && dbuse == false) {
       return Result.fromJson(
           await UserService.fetchUsers(page: page, gender: gender));
     }

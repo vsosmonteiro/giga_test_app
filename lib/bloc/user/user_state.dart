@@ -20,5 +20,4 @@ class UserLoadedState extends UserState{
   Result result;
   UserLoadedState(this.result);
 }
-class UserDeletedState extends UserState{}
-class UserDBDeletedState extends UserState{}
+class UserNewFetchState extends UserState{}

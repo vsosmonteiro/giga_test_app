@@ -34,8 +34,9 @@ import 'package:path/path.dart';
   static Future<List<Map<String, dynamic>>> getUsers(
       Database db, String gender , int offset) async {
     var newoffset = offset * 20;
-    String query = 'SELECT * FROM users WHERE gender= $gender LIMIT 20 OFFSET $newoffset';
+    String query = "SELECT * FROM users WHERE gender = '$gender' LIMIT 20 OFFSET $newoffset";
     final List<Map<String, dynamic>> maps = await db.rawQuery(query);
+    //print(maps);
     return maps;
   }
 
