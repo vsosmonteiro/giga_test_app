@@ -37,8 +37,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       Result result = await UsersRepository.repoFetchUser(
           page: event.page, gender: event.gender, dbuse: event.db);
-      emit(
-        UserLoadedState(result),
+      emit(UserLoadedState(result),
       );
     } catch (e) {
       if (e is NoUserException) {
