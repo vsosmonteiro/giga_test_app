@@ -50,9 +50,9 @@ abstract class UsersRepository {
           'thumbnail': current['thumbnail']
         }
       };
+
       result['results'].add(map);
     }
-
     return Result.fromJson(
         result);
   }

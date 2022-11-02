@@ -34,9 +34,31 @@ class _LoadingWidgetState extends State<LoadingWidget> {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 12.0),
-            child: CircleAvatar(backgroundColor: Colors.grey.shade200,radius: 24,),
+            child: CircleAvatar(
+              backgroundColor: Colors.grey.shade200,
+              radius: 24,
+            ),
           ),
-          Padding(padding: EdgeInsets.only(left: 30),child: Column(mainAxisAlignment:MainAxisAlignment.center,children: [Container(height: 16,width: 120,color: Colors.grey.shade200,),SizedBox(height: 8,),Container(height: 16,width: 120,color: Colors.grey.shade200,)],))
+          Padding(
+              padding: EdgeInsets.only(left: 30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 16,
+                    width: 120,
+                    color: Colors.grey.shade200,
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Container(
+                    height: 16,
+                    width: 120,
+                    color: Colors.grey.shade200,
+                  )
+                ],
+              ))
         ],
       ),
     );
