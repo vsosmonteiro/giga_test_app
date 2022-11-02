@@ -9,6 +9,7 @@ class UserState extends Equatable{
 }
 
 class UserInitialState extends UserState{}
+class UserNoUserState extends UserState{}
 class UserLoadingState extends UserState{}
 class UserErrorState extends UserState{
   final String? message;
@@ -16,6 +17,7 @@ class UserErrorState extends UserState{
 
 
 }
+
 class UserLoadedState extends UserState{
   Result result;
   UserLoadedState(this.result);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:giga_test_app/repositories/user_repository.dart';
+import 'package:giga_test_app/widgets/circle_container.dart';
 import 'package:provider/provider.dart';
 
 import '../bloc/user/user_bloc.dart';
@@ -59,9 +60,9 @@ class _UserScreenState extends State<UserScreen> {
                   Container(
                     height: 200,
                     decoration: BoxDecoration(
-                      color: Colors.red,
+                      color: Colors.grey,
                       image: DecorationImage(
-                        fit: BoxFit.fill,
+                        fit: BoxFit.contain,
                         image: NetworkImage(_userProvider.thumbnail),
                       ),
                     ),
@@ -85,7 +86,7 @@ class _UserScreenState extends State<UserScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 12.0),
                           child: Row(
                             children: [
-                              const Icon(Icons.person),
+                               Circle_Container(url: _userProvider.largePicture),
                               const SizedBox(
                                 width: 12,
                               ),

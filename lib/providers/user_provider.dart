@@ -11,21 +11,25 @@ class UserProvider extends ChangeNotifier{
     email=newEmail;
     notifyListeners();
   }
+
   setName(String newName)
   {
     name=newName;
     notifyListeners();
   }
-  setLargePicture(String largePicture)
+
+  setLargePicture(String newlargePicture)
   {
-    largePicture=largePicture;
+    largePicture=newlargePicture;
     notifyListeners();
   }
+
   setThumbnail(String newThumb)
   {
     thumbnail=newThumb;
     notifyListeners();
   }
+
   setgender(String newGender)
   {
     gender=newGender;

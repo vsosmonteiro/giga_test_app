@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:giga_test_app/bloc/user/user_bloc.dart';
 import 'package:giga_test_app/bloc/user/user_event.dart';
 import 'package:giga_test_app/bloc/user/user_state.dart';
+import 'package:giga_test_app/models/user_model.dart';
 import 'package:giga_test_app/providers/user_provider.dart';
+import 'package:giga_test_app/widgets/circle_container.dart';
 import 'package:giga_test_app/widgets/loading_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int page = 0;
   late final UserProvider _userProvider = context.read<UserProvider>();
   final List<bool> _selectedSource = [true, false];
+  final List<bool> _selectedGender = [true, false];
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +33,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: InkWell(
               onTap: () {
                 context.read<UserBloc>()
-                  ..add(UserFetchEvent(_selectedSource[0], 0, 'male'));
+                  ..add(UserFetchEvent(_selectedSource[0], 0,
+                      _selectedGender[0] == true ? 'male' : 'female'));
               },
               child: const Icon(Icons.refresh),
             ),
@@ -43,15 +47,35 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.symmetric(vertical: 12.0),
             child: Text('Select The Source'),
           ),
-          ToggleButtons(
-            children: [Text('DB'), Text('APi')],
-            isSelected: _selectedSource,
-            onPressed: (int index) {
-              setState(() {
-                _selectedSource[0] = !_selectedSource[0];
-                _selectedSource[1] = !_selectedSource[1];
-              });
-            },
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12.0),
+            child: ToggleButtons(
+              children: [Text('DB'), Text('APi')],
+              isSelected: _selectedSource,
+              onPressed: (int index) {
+                setState(() {
+                  _selectedSource[0] = !_selectedSource[0];
+                  _selectedSource[1] = !_selectedSource[1];
+                });
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12.0),
+            child: Text('Select The Gender'),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12.0),
+            child: ToggleButtons(
+              children: [Text('Male'), Text('Female')],
+              isSelected: _selectedGender,
+              onPressed: (int index) {
+                setState(() {
+                  _selectedGender[0] = !_selectedGender[0];
+                  _selectedGender[1] = !_selectedGender[1];
+                });
+              },
+            ),
           ),
           Flexible(
             fit: FlexFit.loose,
@@ -60,15 +84,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (state is UserNewFetchState) {
                   context
                       .read<UserBloc>()
-                      .add(UserFetchEvent(_selectedSource[0], page, 'male'));
+                      .add(UserFetchEvent(_selectedSource[0], page, _selectedGender[0] == true ? 'male' : 'female'));
                 }
               },
               builder: (context, state) {
-                if (state is UserErrorState) {
-                  return Container(
-                    child: Text(
-                        'The database is empty, please make a api request'),
-                  );
+                if(state is UserErrorState)
+                  {
+                    return Text(state.message!);
+                  }
+                if (state is UserNoUserState) {
+                  return Text(
+                      'The database is empty, please make a api request or return the page');
                 }
 
                 if (state is UserLoadingState) {
@@ -92,17 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       child: ListTile(
-                        leading: Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                  state.result.users![index].picture!.medium!),
-                            ),
-                          ),
-                        ),
+                        leading: Circle_Container(url: state.result.users![index].picture!.medium!),
                         title: Text(
                           '${state.result.users![index].name!.title!} ${state.result.users![index].name!.first!} ${state.result.users![index].name!.last!}',
                           style: TextStyle(fontSize: 16),
@@ -112,16 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         dense: true,
                         trailing: IconButton(
                             onPressed: () {
-                              _userProvider
-                                  .setEmail(state.result.users![index].email!);
-                              _userProvider.setName(
-                                  '${state.result.users![index].name!.title!} ${state.result.users![index].name!.first!} ${state.result.users![index].name!.last!}');
-                              _userProvider.setgender(
-                                  state.result.users![index].gender!);
-                              _userProvider.setLargePicture(
-                                  state.result.users![index].picture!.large!);
-                              _userProvider.setThumbnail(state
-                                  .result.users![index].picture!.thumbnail!);
+                              setProvider(state.result,index);
 
                               Navigator.pushNamed(context, '/user');
                             },
@@ -143,9 +150,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () {
                     page += 1;
                     context.read<UserBloc>()
-                      ..add(UserFetchEvent(_selectedSource[0], page, 'male'));
+                      ..add(UserFetchEvent(_selectedSource[0], page, _selectedGender[0] == true ? 'male' : 'female'));
                   },
                   child: Text('Next Page')),
+              ElevatedButton(
+                  onPressed: () {
+                    if(page>=1)
+                      {page -= 1;}
+                    context.read<UserBloc>()
+                      ..add(UserFetchEvent(_selectedSource[0], page, _selectedGender[0] == true ? 'male' : 'female'));
+                  },
+                  child: Text('Previous Page')),
               ElevatedButton(
                   onPressed: () {
                     page += 1;
@@ -157,5 +172,19 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  void setProvider(Result result,int index) {
+    _userProvider
+        .setEmail(result.users![index].email!);
+    _userProvider.setName(
+        '${result.users![index].name!.title!} ${result.users![index].name!.first!} ${result.users![index].name!.last!}');
+    _userProvider.setgender(
+        result.users![index].gender!);
+    _userProvider.setLargePicture(
+        result.users![index].picture!.large!);
+    _userProvider.setThumbnail(
+        result.users![index].picture!.thumbnail!);
+
   }
 }
