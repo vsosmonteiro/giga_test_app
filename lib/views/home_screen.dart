@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:giga_test_app/bloc/user/user_bloc.dart';
 import 'package:giga_test_app/bloc/user/user_event.dart';
 import 'package:giga_test_app/bloc/user/user_state.dart';
+import 'package:giga_test_app/providers/user_provider.dart';
 import 'package:giga_test_app/widgets/loading_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,7 +14,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int page=0;
+  int page = 0;
+  late final UserProvider _userProvider = context.read<UserProvider>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +28,8 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.only(right: 24.0),
             child: InkWell(
               onTap: () {
-                context.read<UserBloc>()..add(UserFetchEvent(true, page, 'male'));
+                context.read<UserBloc>()
+                  ..add(UserFetchEvent(true, page, 'male'));
               },
               child: const Icon(Icons.refresh),
             ),
@@ -56,8 +59,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     shrinkWrap: true,
                     itemCount: state.result.users!.length,
                     itemBuilder: (context, index) => Container(
-                      margin:
-                          const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 24),
                       decoration: BoxDecoration(
                         border: Border.all(
                           width: 2,
@@ -77,11 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         title: Text(
-                          state.result.users![index].name!.title! +
-                              ' ' +
-                              state.result.users![index].name!.first! +
-                              ' ' +
-                              state.result.users![index].name!.last!,
+                          '${state.result.users![index].name!.title!} ${state.result.users![index].name!.first!} ${state.result.users![index].name!.last!}',
                           style: TextStyle(fontSize: 16),
                         ),
                         subtitle: Text(state.result.users![index].email!,
@@ -89,6 +88,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         dense: true,
                         trailing: IconButton(
                             onPressed: () {
+                              _userProvider
+                                  .setEmail(state.result.users![index].email!);
+                              _userProvider.setName(
+                                  '${state.result.users![index].name!.title!} ${state.result.users![index].name!.first!} ${state.result.users![index].name!.last!}');
+                              _userProvider.setgender(state.result.users![index].gender!);
+                              _userProvider.setLargePicture(state.result.users![index].picture!.large!);
+                              _userProvider.setThumbnail(state.result.users![index].picture!.thumbnail!);
+
                               Navigator.pushNamed(context, '/user');
                             },
                             icon: Icon(Icons.navigate_next)),
@@ -102,10 +109,13 @@ class _HomeScreenState extends State<HomeScreen> {
               buildWhen: (previous, current) => previous != current,
             ),
           ),
-          ElevatedButton(onPressed: (){
-            page+=1;
-            context.read<UserBloc>()..add(UserFetchEvent(false, page, 'male'));
-          }, child: Text('Next Page'))
+          ElevatedButton(
+              onPressed: () {
+                page += 1;
+                context.read<UserBloc>()
+                  ..add(UserFetchEvent(false, page, 'male'));
+              },
+              child: Text('Next Page'))
         ],
       ),
     );

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/user_provider.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({Key? key}) : super(key: key);
@@ -9,6 +12,8 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserScreenState extends State<UserScreen> {
+  late final UserProvider _userProvider = context.read<UserProvider>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,12 +52,11 @@ class _UserScreenState extends State<UserScreen> {
                 children: [
                   Container(
                     height: 200,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       color: Colors.red,
                       image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(
-                            'https://sm.ign.com/ign_br/screenshot/default/blob_3r9t.jpg'),
+                        fit: BoxFit.fill,
+                        image: NetworkImage(_userProvider.thumbnail),
                       ),
                     ),
                   ),
@@ -82,19 +86,24 @@ class _UserScreenState extends State<UserScreen> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Text('jose@gmail.com'),
+                                children: [
+                                  Text(_userProvider.email),
                                   SizedBox(
                                     height: 4,
                                   ),
-                                  Text('Jose Sousa Segundo')
+                                  Text(_userProvider.name)
                                 ],
                               ),
                               const Spacer(),
-                              const Icon(
-                                Icons.male,
-                                color: Colors.blue,
-                              )
+                              _userProvider.gender == 'male'
+                                  ? Icon(
+                                      Icons.male,
+                                      color: Colors.blue,
+                                    )
+                                  : Icon(
+                                      Icons.female,
+                                      color: Colors.pink,
+                                    )
                             ],
                           ),
                         ),
@@ -127,11 +136,11 @@ class _UserScreenState extends State<UserScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('jose@gmail.com'),
+                  Text(_userProvider.email),
                   IconButton(
                       onPressed: () async {
                         await Clipboard.setData(
-                            const ClipboardData(text: "your text"));
+                            ClipboardData(text: _userProvider.email));
                       },
                       icon: const Icon(Icons.copy))
                 ],
@@ -143,11 +152,11 @@ class _UserScreenState extends State<UserScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Jose Sousa Segundo'),
+                  Text(_userProvider.name),
                   IconButton(
                       onPressed: () async {
                         await Clipboard.setData(
-                            const ClipboardData(text: "your text"));
+                            ClipboardData(text: _userProvider.name));
                       },
                       icon: const Icon(Icons.copy))
                 ],
