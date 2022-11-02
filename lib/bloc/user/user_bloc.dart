@@ -7,19 +7,35 @@ import 'package:giga_test_app/repositories/user_repository.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc() : super(UserInitialState()) {
-    on<UserFetchEvent>((event, emit) async {
-      try {
-        Result result = await UsersRepository.repoFetchUser(
-            page: event.page, gender: event.gender);
-        emit(
-          UserLoadedState(result),
-        );
-      } on NoUserException catch (e) {
-        emit(UserErrorState(e.message));
-      }
-      on<UserDeleteEvent>((event, emit) {
-
-      });
+    on<UserFetchEvent>(
+      (event, emit) async {
+        try {
+          Result result = await UsersRepository.repoFetchUser(
+              page: event.page, gender: event.gender, dbuse: event.db);
+          emit(
+            UserLoadedState(result),
+          );
+        } on NoUserException catch (e) {
+          emit(
+            UserErrorState(e.message),
+          );
+        }
+      },
+    );
+    on<UserDeleteEvent>(
+      (event, emit) {
+        UsersRepository.deleteUser(event.email);
+        emit(UserDeletedState());
+      },
+    );
+    on<UserInsertEvent>(
+      (event, emit) {
+        UsersRepository.insertUser(event.user);
+      },
+    );
+    on<UserDBDeleteEvent>((event,emit){
+      UsersRepository.deleteDB();
+      emit(UserDBDeletedState());
     });
   }
 }

@@ -2,10 +2,11 @@ import 'package:giga_test_app/models/user_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class SqLiteService {
-  final String database_name = 'Users.db';
+ abstract class SqLiteService {
 
-  Future<Database> initDB() async {
+
+  static Future<Database> initDB() async {
+    final String database_name = 'Users.db';
     final databasepath = await getDatabasesPath();
     final path = join(databasepath, database_name);
 
@@ -15,7 +16,7 @@ class SqLiteService {
     }, version: 1);
   }
 
-  Future<void> insertUser(Database db, User results) async {
+  static Future<void> insertUser(Database db, User results) async {
     await db.rawInsert(
         'INSERT OR REPLACE INTO users(email,gender,title,first_name,last_name,picture_large,picture_medium,thumbnail) VALUES(\$1,\$2,\$3,\$4,\$5,\$6,\$7,\$8)',
         [
@@ -30,19 +31,19 @@ class SqLiteService {
         ]);
   }
 
-  Future<List<Map<String, dynamic>>> getUsers(
-      Database db, int limit, int offset) async {
+  static Future<List<Map<String, dynamic>>> getUsers(
+      Database db, String gender , int offset) async {
     var newoffset = offset * 20;
-    String query = 'SELECT * FROM users LIMIT $limit OFFSET $newoffset';
+    String query = 'SELECT * FROM users WHERE gender= $gender LIMIT 20 OFFSET $newoffset';
     final List<Map<String, dynamic>> maps = await db.rawQuery(query);
     return maps;
   }
 
-  Future<void> deleteDB(Database db) async {
+  static Future<void> deleteDB(Database db) async {
     await db.delete('users');
   }
 
-  Future<void> deleteUser(Database db, String email) async {
+  static Future<void> deleteUser(Database db, String email) async {
     String query = 'DELETE FROM users WHERE email =' + "'" + email + "';";
     await db.rawDelete(query);
   }

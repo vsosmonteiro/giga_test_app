@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../models/user_model.dart';
+
 class UserEvent extends Equatable{
   @override
   // TODO: implement props
@@ -15,4 +17,10 @@ class UserFetchEvent extends UserEvent{
 class UserDeleteEvent extends UserEvent{
   String email;
   UserDeleteEvent(this.email);
+}
+class UserInsertEvent extends UserEvent{
+  User user;
+  UserInsertEvent(this.user);
+}
+class UserDBDeleteEvent extends UserEvent{
 }
