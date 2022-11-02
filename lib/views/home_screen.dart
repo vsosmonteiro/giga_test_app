@@ -16,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int page = 0;
   late final UserProvider _userProvider = context.read<UserProvider>();
+  final List<bool> _selectedSource = [true, false];
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: InkWell(
               onTap: () {
                 context.read<UserBloc>()
-                  ..add(UserFetchEvent(true, page, 'male'));
+                  ..add(UserFetchEvent(_selectedSource[0], 0, 'male'));
               },
               child: const Icon(Icons.refresh),
             ),
@@ -38,13 +39,36 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12.0),
+            child: Text('Select The Source'),
+          ),
+          ToggleButtons(
+            children: [Text('DB'), Text('APi')],
+            isSelected: _selectedSource,
+            onPressed: (int index) {
+              setState(() {
+                _selectedSource[0] = !_selectedSource[0];
+                _selectedSource[1] = !_selectedSource[1];
+              });
+            },
+          ),
           Flexible(
             fit: FlexFit.loose,
             child: BlocConsumer<UserBloc, UserState>(
-              listener: (context, state) {},
+              listener: (context, state) {
+                if (state is UserNewFetchState) {
+                  context
+                      .read<UserBloc>()
+                      .add(UserFetchEvent(_selectedSource[0], page, 'male'));
+                }
+              },
               builder: (context, state) {
                 if (state is UserErrorState) {
-                  return Container(height: 100, width: 100, color: Colors.pink);
+                  return Container(
+                    child: Text(
+                        'The database is empty, please make a api request'),
+                  );
                 }
 
                 if (state is UserLoadingState) {
@@ -92,9 +116,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .setEmail(state.result.users![index].email!);
                               _userProvider.setName(
                                   '${state.result.users![index].name!.title!} ${state.result.users![index].name!.first!} ${state.result.users![index].name!.last!}');
-                              _userProvider.setgender(state.result.users![index].gender!);
-                              _userProvider.setLargePicture(state.result.users![index].picture!.large!);
-                              _userProvider.setThumbnail(state.result.users![index].picture!.thumbnail!);
+                              _userProvider.setgender(
+                                  state.result.users![index].gender!);
+                              _userProvider.setLargePicture(
+                                  state.result.users![index].picture!.large!);
+                              _userProvider.setThumbnail(state
+                                  .result.users![index].picture!.thumbnail!);
 
                               Navigator.pushNamed(context, '/user');
                             },
@@ -109,48 +136,26 @@ class _HomeScreenState extends State<HomeScreen> {
               buildWhen: (previous, current) => previous != current,
             ),
           ),
-          ElevatedButton(
-              onPressed: () {
-                page += 1;
-                context.read<UserBloc>()
-                  ..add(UserFetchEvent(false, page, 'male'));
-              },
-              child: Text('Next Page'))
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ElevatedButton(
+                  onPressed: () {
+                    page += 1;
+                    context.read<UserBloc>()
+                      ..add(UserFetchEvent(_selectedSource[0], page, 'male'));
+                  },
+                  child: Text('Next Page')),
+              ElevatedButton(
+                  onPressed: () {
+                    page += 1;
+                    context.read<UserBloc>()..add(UserDBDeleteEvent());
+                  },
+                  child: Text('Clean DB')),
+            ],
+          )
         ],
       ),
     );
   }
 }
-/*
-ListView(children: [
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-          decoration: BoxDecoration(
-              border: Border.all(
-                width: 2,
-                color: Colors.grey,
-              ),
-              borderRadius: BorderRadius.circular(12)),
-          child:  ListTile(
-            leading: CircleAvatar(child: Icon(Icons.person)),
-            title: Text('Jose Carlos Segundo'),
-            subtitle: Text('jose2@gmail.com'),
-            trailing: IconButton(
-                onPressed: () => Navigator.pushNamed(context, '/user'),
-                icon: Icon(Icons.navigate_next)),
-          ),
-        ),
-        const SizedBox(
-          height: 32,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: ElevatedButton(
-              style: ButtonStyle(
-                  padding: MaterialStateProperty.all(
-                      const EdgeInsets.symmetric(vertical: 20))),
-              onPressed: () {},
-              child: const Text('Load More')),
-        )
-      ])
- */

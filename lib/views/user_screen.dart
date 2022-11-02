@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:giga_test_app/repositories/user_repository.dart';
 import 'package:provider/provider.dart';
 
+import '../bloc/user/user_bloc.dart';
+import '../bloc/user/user_event.dart';
 import '../providers/user_provider.dart';
 
 class UserScreen extends StatefulWidget {
@@ -28,6 +31,9 @@ class _UserScreenState extends State<UserScreen> {
                     actions: [
                       TextButton(
                         onPressed: () {
+                          context.read<UserBloc>()
+                            ..add(UserDeleteEvent(_userProvider.email));
+                          Navigator.of(context).pop();
                           Navigator.of(context).pop();
                         },
                         child: const Text('Sim'),
