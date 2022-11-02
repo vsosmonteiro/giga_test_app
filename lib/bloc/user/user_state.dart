@@ -9,7 +9,9 @@ class UserState extends Equatable {
 
 class UserInitialState extends UserState {}
 
-class UserNoUserState extends UserState {}
+class UserNoUserState extends UserState {
+  //empty list
+}
 
 class UserLoadingState extends UserState {}
 
@@ -25,4 +27,7 @@ class UserLoadedState extends UserState {
   UserLoadedState(this.result);
 }
 
-class UserNewFetchState extends UserState {}
+class UserNewFetchState extends UserState {
+  // when you need to update the last fetch because of a change
+}
+

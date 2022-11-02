@@ -5,6 +5,8 @@ import '../providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class Stackwidget extends StatefulWidget {
+  // puts a stack with a bigger invisible container wrapping so i
+  // can push the container down and not be clipped
   const Stackwidget({Key? key}) : super(key: key);
 
   @override

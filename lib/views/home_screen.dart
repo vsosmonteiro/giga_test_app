@@ -16,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  //page counter,provider,toogle buttons lists
   int page = 0;
   late final UserProvider _userProvider = context.read<UserProvider>();
   final List<bool> _selectedSource = [true, false];
@@ -54,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
           fit: FlexFit.loose,
           child: BlocConsumer<UserBloc, UserState>(
             listener: (context, state) {
+              //if state is UserNewFetchState is nedded a new fetch event
               if (state is UserNewFetchState) {
                 context.read<UserBloc>().add(UserFetchEvent(
                     _selectedSource[0],
@@ -62,14 +64,16 @@ class _HomeScreenState extends State<HomeScreen> {
               }
             },
             builder: (context, state) {
+              // if it has an error it shows on the screen
               if (state is UserErrorState) {
                 return Text(state.message!);
               }
+              //if its  empty says to make a request to api because it saves on the db
               if (state is UserNoUserState) {
                 return const Text(
                     'The database is empty, please make a api request or return the page');
               }
-
+              //loading shinner animation
               if (state is UserLoadingState) {
                 return ListView.builder(
                   shrinkWrap: true,
@@ -77,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemCount: 6,
                 );
               }
+              // it has a list of users so its uses a list builder
               if (state is UserLoadedState) {
                 return ListView.builder(
                   shrinkWrap: true,
@@ -111,6 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               } else {
+                //initial state
                 return const Padding(
                   padding: EdgeInsets.symmetric(vertical: 12.0),
                   child: Text('Welcome to The Random User App'),
@@ -132,6 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ElevatedButton(
                 onPressed: () {
                   page += 1;
+                  //fetches next page
                   context.read<UserBloc>().add(UserFetchEvent(
                       _selectedSource[0],
                       page,
@@ -143,6 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (page >= 1) {
                     page -= 1;
                   }
+                  //fetches previous page
                   context.read<UserBloc>().add(UserFetchEvent(
                       _selectedSource[0],
                       page,
@@ -152,6 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ElevatedButton(
                 onPressed: () {
                   page += 1;
+                  //deletes db table
                   context.read<UserBloc>().add(UserDBDeleteEvent());
                 },
                 child: const Text('Clean DB')),
@@ -160,6 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   ToggleButtons _MyToggleButton(List<bool> list, List<Widget> children) {
+    // used to select gender and source
     return ToggleButtons(
       isSelected: list,
       onPressed: (int index) {
@@ -178,6 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
       centerTitle: true,
       actions: [
         Padding(
+          // refresh the last api request
           padding: const EdgeInsets.only(right: 24.0),
           child: InkWell(
             onTap: () {
@@ -192,6 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void setProvider(Result result, int index) {
+    // set values to user screen
     _userProvider.setEmail(result.users![index].email!);
     _userProvider.setName(
         '${result.users![index].name!.title!} ${result.users![index].name!.first!} ${result.users![index].name!.last!}');

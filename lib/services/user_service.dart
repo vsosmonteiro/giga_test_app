@@ -8,6 +8,7 @@ abstract class UserService {
   static Future<Map<String, dynamic>> fetchUsers(
       {required int page, required String gender}) async {
     try {
+      // request the api using page and gender parametes with the baseURL
       String baseUrl =
           'https://randomuser.me/api/1.4/?format=json&results=20&inc=gender,email,name,picture&nat=br';
       Response response = await Dio()
@@ -15,12 +16,14 @@ abstract class UserService {
 
       return response.data as Map<String, dynamic>;
     } on DioError catch (e) {
+      //if results !=200 or 204
       if (e.response != null) {
         throw ApiException(code: e.response?.statusCode, message: e.message);
       } else {
+        //if the last didnt throw means that the request had a problem
+
         throw ApiException(code: -1, message: e.message);
       }
     }
   }
 }
-

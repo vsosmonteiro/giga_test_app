@@ -16,8 +16,9 @@ abstract class UsersRepository {
     final Connectivity connectivity = Connectivity();
     ConnectivityResult connectivityResult =
         await connectivity.checkConnectivity();
-
+    // if there is connectivity and the request of db use is false it requests the api else requests the db
     if (connectivityResult != ConnectivityResult.none && dbuse == false) {
+      //return a Result object
       Result result = Result.fromJson(
           await UserService.fetchUsers(page: page, gender: gender));
       result.users?.forEach((element) {
@@ -26,8 +27,10 @@ abstract class UsersRepository {
       return result;
     } else {
       try {
+        //requests from the db
         List<Map<String, dynamic>> dbquery =
             await SqLiteService.getUsers(db!, gender, page);
+        // if query is right but empty
         if (dbquery.isEmpty) {
           throw NoUserException(message: 'No More Users to Show');
         }
@@ -39,6 +42,7 @@ abstract class UsersRepository {
         if (e is NoUserException) {
           throw NoUserException(message: 'No More Users to Show');
         }
+        //if the db throws
         throw MyDatabaseException();
       }
     }

@@ -6,6 +6,7 @@ import 'package:path/path.dart';
 
 
   static Future<Database> initDB() async {
+    //initialize the db
     const String database_name = 'Users.db';
     final databasepath = await getDatabasesPath();
     final path = join(databasepath, database_name);
@@ -17,6 +18,7 @@ import 'package:path/path.dart';
   }
 
   static Future<void> insertUser(Database db, User results) async {
+    //insert into the db
     await db.rawInsert(
         'INSERT OR REPLACE INTO users(email,gender,title,first_name,last_name,picture_large,picture_medium,thumbnail) VALUES(\$1,\$2,\$3,\$4,\$5,\$6,\$7,\$8)',
         [
@@ -33,6 +35,7 @@ import 'package:path/path.dart';
 
   static Future<List<Map<String, dynamic>>> getUsers(
       Database db, String gender , int offset) async {
+    //select with pagination and limit
     var newoffset = offset * 20;
     String query = "SELECT * FROM users WHERE gender = '$gender' LIMIT 20 OFFSET $newoffset";
     final List<Map<String, dynamic>> maps = await db.rawQuery(query);
@@ -40,10 +43,12 @@ import 'package:path/path.dart';
   }
 
   static Future<void> deleteDB(Database db) async {
+    //delete table
     await db.delete('users');
   }
 
   static Future<void> deleteUser(Database db, String email) async {
+    // delete user by email
     String query = 'DELETE FROM users WHERE email =' + "'" + email + "';";
     await db.rawDelete(query);
   }

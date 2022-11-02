@@ -10,8 +10,10 @@ import 'package:giga_test_app/views/user_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+  // ensure its initialized before init the db
   WidgetsFlutterBinding.ensureInitialized();
   db = await SqLiteService.initDB();
+  //locks orientation
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
     (value) => runApp(
       const MyApp(),
@@ -24,6 +26,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // uses provider and bloc
     return BlocProvider<UserBloc>(
       create: (BuildContext context) => UserBloc(),
       child: MultiProvider(
@@ -34,6 +37,7 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
+          // define routes
           routes: {
             '/': (_) => HomeScreen(),
             '/user': (_) => UserScreen(),
